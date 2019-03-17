@@ -22,7 +22,9 @@ services:
             MYSQL_DATABASE: sf4
             MYSQL_USER: sf4
             MYSQL_PASSWORD: sf4
-
+        ports:
+#          - 3306:3306
+          - 3307:33060
     php:
         build: .docker/php
         container_name: sf4_php
@@ -31,7 +33,7 @@ services:
         environment:
           - maildev_host=sf4_maildev
         depends_on:
-          - maildev
+#          - maildev
           - mysql
 
     phpmyadmin:
@@ -45,8 +47,18 @@ services:
         links:
             - mysql
 
-    maildev:
-        image: djfarrelly/maildev
-        container_name: sf4_maildev
+#    maildev:
+#        image: djfarrelly/maildev
+#        container_name: sf4_maildev
+#        ports:
+#          - 8001:80
+
+    mercure:
+        image: dunglas/mercure
+        environment:
+          PUBLISHER_JWT_KEY: dzadzadz
+          SUBSCRIBER_JWT_KEY: adzadza
+          ALLOW_ANONYMOUS: 1
+          CORS_ALLOWED_ORIGINS: "http://localhost:3000"
         ports:
-          - 8001:80
+          - 3333:80
