@@ -71,9 +71,9 @@ class PostsController extends AbstractFOSRestController
             $userId = $request->request->get('user');
             $this->_postsService->addSubscriber($post, $userId);
             $subscriptionToken = $this->_tokenService->generatePostSubscriptionToken($userId);
-
-            return $this->view([], Response::HTTP_NO_CONTENT, [
-                'token' => $subscriptionToken
+            $cookie = "mercureAuthorization={$subscriptionToken}; Path=/hub; HttpOnly;";
+            return $this->view([], Response::HTTP_OK, [
+                'set-cookie' =>  $cookie
             ]);
         });
     }
@@ -89,9 +89,9 @@ class PostsController extends AbstractFOSRestController
             $userId = $request->request->get('user');
             $this->_postsService->removeSubscriber($post, $userId);
             $subscriptionToken = $this->_tokenService->generatePostSubscriptionToken($userId);
-
-            return $this->view([], Response::HTTP_NO_CONTENT, [
-                'token' => $subscriptionToken
+            $cookie = "mercureAuthorization={$subscriptionToken}; Path=/hub; HttpOnly;";
+            return $this->view([], Response::HTTP_OK, [
+                'set-cookie' =>  $cookie
             ]);
         });
     }

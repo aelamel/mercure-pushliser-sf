@@ -60,4 +60,22 @@ class UsersService
         return $this->_userRepository->update($user, ['loggedIn' => false]);
     }
 
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public function retrieveUserPosts($userId)
+    {
+        if (empty($userId)) {
+            throw new HttpException(Response::HTTP_BAD_REQUEST, "Missing user id");
+        }
+
+        $user = $this->_userRepository->find($userId);
+        if ($user == null) {
+            throw new HttpException(Response::HTTP_NOT_FOUND, 'User not found');
+        }
+        return $user->getPosts();
+
+    }
+
 }
