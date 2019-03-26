@@ -18,16 +18,20 @@ class PostsRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Post::class);
+        $this->key = array_flip($this->key);
     }
 
     public function findOrCreateOne($data) {
-        $criteria = array_intersect($this->key, $data);
-
-        $entity = $this->findOneBy($criteria);
-        if ($entity == null) {
-            $entity = new Post();
+        if(count($this->key) > 0) {
+            $search = array_intersect_key($data, $this->key);
+            if(count($search) > 0) {
+                $entity = $this->findOneBy($search);
+                if (null !== $entity) {
+                    return $entity;
+                }
+            }
         }
-        return $entity;
+        return new Post();
     }
 
     /**

@@ -55,8 +55,7 @@ class UsersController extends AbstractFOSRestController
         return $this->handleExceptionsIn(function () use ($request) {
             $userData = $request->request->get('user');
             $user = $this->_usersService->signin($userData);
-            $subscriptionToken = $this->_tokenService->generatePostSubscriptionToken($userData['id']);
-            $cookie = "mercureAuthorization={$subscriptionToken}; Path=/hub; HttpOnly;";
+            list($subscriptionToken, $cookie) = $this->_tokenService->generatePostSubscriptionToken($userData['id']);
             return $this->view([
                 'user' => $user
             ], Response::HTTP_OK, [

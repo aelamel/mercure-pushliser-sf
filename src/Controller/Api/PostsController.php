@@ -70,8 +70,7 @@ class PostsController extends AbstractFOSRestController
         return $this->handleExceptionsIn(function () use ($post, $request) {
             $userId = $request->request->get('user');
             $this->_postsService->addSubscriber($post, $userId);
-            $subscriptionToken = $this->_tokenService->generatePostSubscriptionToken($userId);
-            $cookie = "mercureAuthorization={$subscriptionToken}; Path=/hub; HttpOnly;";
+            list(, $cookie) = $this->_tokenService->generatePostSubscriptionToken($userId);
             return $this->view([], Response::HTTP_OK, [
                 'set-cookie' =>  $cookie
             ]);
@@ -88,8 +87,7 @@ class PostsController extends AbstractFOSRestController
         return $this->handleExceptionsIn(function () use ($post, $request) {
             $userId = $request->request->get('user');
             $this->_postsService->removeSubscriber($post, $userId);
-            $subscriptionToken = $this->_tokenService->generatePostSubscriptionToken($userId);
-            $cookie = "mercureAuthorization={$subscriptionToken}; Path=/hub; HttpOnly;";
+            list(, $cookie) = $this->_tokenService->generatePostSubscriptionToken($userId);
             return $this->view([], Response::HTTP_OK, [
                 'set-cookie' =>  $cookie
             ]);

@@ -35,7 +35,9 @@ class TokenService
         /** @var User $user */
         $user = $this->_userRepository->find($userId);
         if ($user) {
-            return $this->_tokenGenerator->generateNotificationToken($user->getPosts());
+            $subscriptionToken = $this->_tokenGenerator->generateNotificationToken($user->getPosts());
+            $cookie = "mercureAuthorization={$subscriptionToken}; Path=/hub; HttpOnly;";
+            return [$subscriptionToken, $cookie];
         } else {
             throw new HttpException(Response::HTTP_NOT_FOUND, "No User found");
         }
