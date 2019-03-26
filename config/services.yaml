@@ -6,6 +6,11 @@
 parameters:
     env(MERCURE_PUBLISH_URL): ''
     env(MERCURE_JWT_SECRET): ''
+    mercure:
+      target_base_url: 'http://local.dev'
+      posts_target_path: '/posts'
+      notification_channel_path: '/notifications'
+      subscriber_secret: '%env(SUBSCRIBER_JWT_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -32,3 +37,14 @@ services:
     # please note that last definitions always *replace* previous ones
     sensio_framework_extra.view.listener:
         alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
+
+    App\Service\PostNotificationService:
+      arguments:
+        $mercureConfig: '%mercure%'
+    App\Service\JwtGenerator:
+      arguments:
+        $mercureConfig: '%mercure%'
+
+    App\Provider\JwtProvider:
+      arguments:
+        $secret: '%env(MERCURE_JWT_KEY)%'

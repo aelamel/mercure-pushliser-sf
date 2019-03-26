@@ -5,10 +5,13 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Repository\UsersRepository;
-use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/**
+ * Class TokenService
+ * @package App\Service
+ */
 class TokenService
 {
 
@@ -19,6 +22,11 @@ class TokenService
     private $_userRepository;
 
 
+    /**
+     * TokenService constructor.
+     * @param JwtGenerator $jwtGenerator
+     * @param UsersRepository $usersRepository
+     */
     public function __construct(
         JwtGenerator $jwtGenerator,
         UsersRepository $usersRepository)
